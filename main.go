@@ -30,7 +30,7 @@ PayoutPhone string `json:"payout_phone"`
 
 type Customer struct {
 Name string
-PaymentType string // "Orange Money" or "Wave"
+PaymentType string
 Phone string
 }
 
@@ -39,10 +39,9 @@ ID int
 Restaurant string
 Item string
 Driver string
-Status string // "Preparing", "Ready for Pickup", "Dispatched"
+Status string
 }
 
-// Global Application State (In-Memory Database)
 var drivers = []Driver{
 {ID: 1, Name: "Alpha Diallo", Service: "taxi", Status: "pending", Earnings: 0.0, PayoutType: "Wave", PayoutPhone: "+224-622-11-22-33"},
 {ID: 2, Name: "Mariama Barry", Service: "delivery", Status: "approved", Earnings: 120.50, PayoutType: "Orange Money", PayoutPhone: "+224-664-44-55-66"},
@@ -74,6 +73,7 @@ port = "10000"
 http.HandleFunc("/", visualDashboardHandler)
 http.HandleFunc("/admin/save-payout", savePayoutHandler)
 http.HandleFunc("/admin/drivers/status", updateDriverStatusHandler)
+http.HandleFunc("/admin/drivers/clear-payout", clearDriverPayoutHandler)
 http.HandleFunc("/admin/add-customer", addCustomerHandler)
 http.HandleFunc("/admin/add-order", addOrderHandler)
 http.HandleFunc("/admin/drivers", listDriversHandler)
@@ -131,6 +131,7 @@ td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size:
 .btn { background: #0284c7; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%%; }
 .btn-secure { background: #dc2626; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
 .btn-action { background: #16a34a; font-size: 11px; padding: 4px 8px; width: auto; }
+.btn-payout { background: #ea580c; font-size: 11px; padding: 4px 8px; width: auto; margin-left: 5px; }
 .form-group { margin-bottom: 12px; }
 label { display: block; font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 4px; }
 input[type="text"], select { width: 100%%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
@@ -143,6 +144,9 @@ alert("🚨 AFROUNITED SECURE PICKUP VERIFICATION\n\n[Store Location: " + restau
 }
 function triggerRiderSafetyPopup() {
 alert("🛡️ ANTI-FRAUD RIDER VEHICLE MATCHING CHECK\n\nBEFORE ENTERING THE VEHICLE:\n1. Verify the driver's face matches the profile portrait in your app.\n2. Confirm the vehicle license plate matches your active ride receipt exactly.");
+}
+function alertPayoutDispatched(driverName, method, target) {
+alert("💸 TRANSACTION SENT\n\nPlatform has successfully routed the earnings settlement for " + driverName + " directly to their preferred " + method + " wallet: " + target);
 }
 </script>
 </head>
@@ -182,37 +186,14 @@ alert("🛡️ ANTI-FRAUD RIDER VEHICLE MATCHING CHECK\n\nBEFORE ENTERING THE VE
 <tr>
 <th>Driver</th>
 <th>Service</th>
+<th>Accrued Earnings</th>
 <th>Payout Method</th>
 <th>Wallet Targets</th>
-<th>Status</th>
+<th>Action Execution</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><strong>Alpha Diallo</strong></td>
-<td>Taxi</td>
-<td><span class="badge wave">Wave</span></td>
-<td>+224-622-11-22-33</td>
-<td>
-<form action="/admin/drivers/status?id=1&status=approved" method="POST" style="margin:0;">
-<button type="submit" class="btn btn-action">Approve</button>
-</form>
-</td>
-</tr>
-<tr>
-<td><strong>Mariama Barry</strong></td>
-<td>Delivery</td>
-<td><span class="badge orange">Orange Money</span></td>
-<td>+224-664-44-55-66</td>
-<td><span class="badge approved">Approved</span></td>
-</tr>
-<tr>
-<td><strong>Amadou Bah</strong></td>
-<td>Taxi</td>
-<td><span class="badge wave">Wave</span></td>
-<td>+224-628-99-88-77</td>
-<td><span class="badge approved">Approved</span></td>
-</tr>
+`+getDriversHTML()+`
 </tbody>
 </table>
 </div>
@@ -222,14 +203,18 @@ alert("🛡️ ANTI-FRAUD RIDER VEHICLE MATCHING CHECK\n\nBEFORE ENTERING THE VE
 <form action="/admin/save-payout" method="POST">
 <div class="form-group">
 <label>Platform Orange Money Number</label>
-<input type="text" name="orange" placeholder="+224..." value="%s">
+<input type="text" name="orange" placeholder="+224..." value="`+adminOrangeMoney+`">
 </div>
 <div class="form-group">
 <label>Platform Wave Number</label>
-<input type="text" name="wave" placeholder="+224..." value="%s">
+<input type="text" name="wave" placeholder="+224..." value="`+adminWave+`">
 </div>
 <button type="submit" class="btn">Update Master Vault</button>
 </form>
+<div style="background:#f8fafc; padding:10px; border-radius:6px; margin-top:12px; font-size:12px; border-left:3px solid #0284c7;">
+🍊 <strong>Active Orange Vault:</strong> `+adminOrangeMoney+`<br>
+🌊 <strong>Active Wave Vault:</strong> `+adminWave+`
+</div>
 </div>
 </div>
 
@@ -300,47 +285,45 @@ alert("🛡️ ANTI-FRAUD RIDER VEHICLE MATCHING CHECK\n\nBEFORE ENTERING THE VE
 </div>
 </div>
 
-<div class="panel">
-<h3>Restaurant Merchant Partners Settlement Ledger</h3>
-<table>
-<thead>
-<tr>
-<th>Merchant ID</th>
-<th>Restaurant Name</th>
-<th>Hub Location</th>
-<th>Aggregated Sales</th>
-<th>Preferred Method</th>
-<th>Merchant Wallet Target</th>
-<th>Platform Payables Remaining</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>#R-01</td>
-<td><strong>Le Ciel Conakry</strong></td>
-<td>Dixinn Hub</td>
-<td>42 orders processed</td>
-<td><span class="badge orange">Orange Money</span></td>
-<td><strong>+224-669-11-22-33</strong></td>
-<td style="color:#16a34a; font-weight:700;">$310.00 due</td>
-</tr>
-<tr>
-<td>#R-02</td>
-<td><strong>Restaurant Bembeya</strong></td>
-<td>Kaloum Hub</td>
-<td>19 orders processed</td>
-<td><span class="badge wave">Wave</span></td>
-<td><strong>+224-620-55-66-77</strong></td>
-<td style="color:#16a34a; font-weight:700;">$145.50 due</td>
-</tr>
-</tbody>
-</table>
-</div>
-
 </div>
 </body>
 </html>
-`, totalRevenue, totalTaxi, totalDelivery, adminOrangeMoney, adminWave)
+`, totalRevenue, totalTaxi, totalDelivery)
+}
+
+func getDriversHTML() string {
+html := ""
+for _, d := range drivers {
+badgeClass := "wave"
+if d.PayoutType == "Orange Money" {
+badgeClass = "orange"
+}
+
+statusAction := ""
+if d.Status == "pending" {
+statusAction = fmt.Sprintf(`
+<form action="/admin/drivers/status?id=%d&status=approved" method="POST" style="margin:0; display:inline;">
+<button type="submit" class="btn btn-action">Approve</button>
+</form>`, d.ID)
+} else {
+statusAction = fmt.Sprintf(`
+<span class="badge approved">Approved</span>
+<a href="/admin/drivers/clear-payout?id=%d" style="text-decoration:none;" onclick="alertPayoutDispatched('%s', '%s', '%s')">
+<button type="button" class="btn btn-payout">Send Payout</button>
+</a>`, d.ID, d.Name, d.PayoutType, d.PayoutPhone)
+}
+
+html += fmt.Sprintf(`
+<tr>
+<td><strong>%s</strong></td>
+<td>%s</td>
+<td style="font-weight:700; color:#1e293b;">$%s</td>
+<td><span class="badge %s">%s</span></td>
+<td>%s</td>
+<td>%s</td>
+</tr>`, d.Name, d.Service, fmt.Sprintf("%.2f", d.Earnings), badgeClass, d.PayoutType, d.PayoutPhone, statusAction)
+}
+return html
 }
 
 func getOrdersHTML() string {
@@ -373,11 +356,19 @@ return html
 func savePayoutHandler(w http.ResponseWriter, r *http.Request) {
 if r.Method == http.MethodPost {
 r.ParseForm()
-if o := r.FormValue("orange"); o != "" {
-adminOrangeMoney = o
+adminOrangeMoney = r.FormValue("orange")
+adminWave = r.FormValue("wave")
 }
-if w := r.FormValue("wave"); w != "" {
-adminWave = w
+http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func clearDriverPayoutHandler(w http.ResponseWriter, r *http.Request) {
+idStr := r.URL.Query().Get("id")
+id, _ := strconv.Atoi(idStr)
+for i, d := range drivers {
+if d.ID == id {
+drivers[i].Earnings = 0.0 // Clear balance upon payment simulation
+break
 }
 }
 http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -404,7 +395,7 @@ newO := LiveOrder{
 ID: newID,
 Restaurant: r.FormValue("restaurant"),
 Item: r.FormValue("item"),
-Driver: "Mariama Barry", // Default assigned simulated courier
+Driver: "Mariama Barry",
 Status: "Ready for Pickup",
 }
 liveOrders = append(liveOrders, newO)
@@ -414,7 +405,7 @@ http.Redirect(w, r, "/", http.StatusSeeOther)
 
 func listDriversHandler(w http.ResponseWriter, r *http.Request) {
 w.Header().Set("Content-Type", "application/json")
-json.NewEncoder(w).Encode(map[string]interface{}{"drivers": drivers, "restaurants": restaurants})
+json.NewEncoder(w).Encode(drivers)
 }
 
 func updateDriverStatusHandler(w http.ResponseWriter, r *http.Request) {
