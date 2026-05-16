@@ -1,4 +1,3 @@
-
 package main
 
 import (
@@ -12,9 +11,9 @@ import (
 // Driver represents a ride-sharing or delivery worker
 type Driver struct {
 ID int `json:"id"`
-Name String `json:"name"`
-Service String `json:"service"` // "taxi" or "delivery"
-Status String `json:"status"` // "pending", "approved", "rejected"
+Name string `json:"name"`
+Service string `json:"service"` // "taxi" or "delivery"
+Status string `json:"status"` // "pending", "approved", "rejected"
 Earnings float64 `json:"earnings"`
 }
 
@@ -25,9 +24,10 @@ var drivers = []Driver{
 }
 
 func main() {
+// Force port to 10000 for Render's environment
 port := os.Getenv("PORT")
 if port == "" {
-port = "8080"
+port = "10000"
 }
 
 // Home Route
@@ -51,8 +51,6 @@ fmt.Println("Error starting server:", err)
 func listDriversHandler(w http.ResponseWriter, r *http.Request) {
 w.Header().Set("Content-Type", "application/json")
 
-// Calculate total platform commissions collected
-// (Taxi: 28.5%, Delivery: 15%)
 var totalTaxiCommissions float64
 var totalDeliveryCommissions float64
 
@@ -83,7 +81,6 @@ http.Error(w, "Method not allowed. Use POST.", http.StatusMethodNotAllowed)
 return
 }
 
-// Read URL parameters: ?id=1&status=approved
 idStr := r.URL.Query().Get("id")
 status := r.URL.Query().Get("status")
 
@@ -93,7 +90,6 @@ http.Error(w, "Invalid driver ID or status parameter", http.StatusBadRequest)
 return
 }
 
-// Find the driver and update their status
 success := false
 for i, d := range drivers {
 if d.ID == id {
