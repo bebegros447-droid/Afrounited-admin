@@ -8,29 +8,41 @@ import (
 "strconv"
 )
 
-// Driver data model with specific payout choice
 type Driver struct {
 ID int `json:"id"`
 Name string `json:"name"`
 Service string `json:"service"`
 Status string `json:"status"`
 Earnings float64 `json:"earnings"`
-PayoutType string `json:"payout_type"` // "Orange Money" or "Wave"
+PayoutType string `json:"payout_type"`
 PayoutPhone string `json:"payout_phone"`
 }
 
-// Restaurant data model for store partners
 type Restaurant struct {
 ID int `json:"id"`
 Name string `json:"name"`
 Location string `json:"location"`
 TotalOrders int `json:"total_orders"`
 BalanceDue float64 `json:"balance_due"`
-PayoutType string `json:"payout_type"` // "Orange Money" or "Wave"
+PayoutType string `json:"payout_type"`
 PayoutPhone string `json:"payout_phone"`
 }
 
-// In-Memory Database State
+type Customer struct {
+Name string
+PaymentType string // "Orange Money" or "Wave"
+Phone string
+}
+
+type LiveOrder struct {
+ID int
+Restaurant string
+Item string
+Driver string
+Status string // "Preparing", "Ready for Pickup", "Dispatched"
+}
+
+// Global Application State (In-Memory Database)
 var drivers = []Driver{
 {ID: 1, Name: "Alpha Diallo", Service: "taxi", Status: "pending", Earnings: 0.0, PayoutType: "Wave", PayoutPhone: "+224-622-11-22-33"},
 {ID: 2, Name: "Mariama Barry", Service: "delivery", Status: "approved", Earnings: 120.50, PayoutType: "Orange Money", PayoutPhone: "+224-664-44-55-66"},
@@ -40,6 +52,14 @@ var drivers = []Driver{
 var restaurants = []Restaurant{
 {ID: 1, Name: "Le Ciel Conakry", Location: "Dixinn", TotalOrders: 42, BalanceDue: 310.00, PayoutType: "Orange Money", PayoutPhone: "+224-669-11-22-33"},
 {ID: 2, Name: "Restaurant Bembeya", Location: "Kaloum", TotalOrders: 19, BalanceDue: 145.50, PayoutType: "Wave", PayoutPhone: "+224-620-55-66-77"},
+}
+
+var customers = []Customer{
+{Name: "Ismaila Diallo", PaymentType: "Orange Money", Phone: "+224-661-00-11-22"},
+}
+
+var liveOrders = []LiveOrder{
+{ID: 101, Restaurant: "Le Ciel Conakry", Item: "Yassa Chicken Rice", Driver: "Mariama Barry", Status: "Ready for Pickup"},
 }
 
 var adminOrangeMoney = "Not Set"
@@ -54,6 +74,8 @@ port = "10000"
 http.HandleFunc("/", visualDashboardHandler)
 http.HandleFunc("/admin/save-payout", savePayoutHandler)
 http.HandleFunc("/admin/drivers/status", updateDriverStatusHandler)
+http.HandleFunc("/admin/add-customer", addCustomerHandler)
+http.HandleFunc("/admin/add-order", addOrderHandler)
 http.HandleFunc("/admin/drivers", listDriversHandler)
 
 fmt.Printf("Dashboard running securely on port %s...\n", port)
@@ -90,14 +112,14 @@ body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; margin: 0
 .sidebar h2 { font-size: 20px; color: #38bdf8; margin-bottom: 30px; }
 .sidebar a { display: block; color: #94a3b8; padding: 12px; text-decoration: none; border-radius: 6px; margin-bottom: 8px; }
 .sidebar a.active { background-color: #1e293b; color: white; }
-.main-content { flex: 1; padding: 40px; }
+.main-content { flex: 1; padding: 40px; box-sizing: border-box; overflow-y: auto; max-height: 100vh; }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
 .card { background: white; padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3b82f6; }
 .card.admin { border-left-color: #38bdf8; background: #f0f9ff; }
 .card-title { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 600; }
 .card-value { font-size: 26px; font-weight: 700; color: #1e293b; margin-top: 5px; }
 .layout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 25px; }
-.panel { background: white; padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.panel { background: white; padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 25px; }
 table { width: 100%%; border-collapse: collapse; text-align: left; }
 th { padding: 12px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 13px; }
 td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 13px; }
@@ -110,18 +132,17 @@ td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size:
 .btn-secure { background: #dc2626; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
 .btn-action { background: #16a34a; font-size: 11px; padding: 4px 8px; width: auto; }
 .form-group { margin-bottom: 12px; }
-input[type="text"] { width: 100%%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
-
-/* Alert Notification Modals styling */
+label { display: block; font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 4px; }
+input[type="text"], select { width: 100%%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
 .safety-banner { background: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 8px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; }
-.safety-title { color: #991b1b; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.safety-title { color: #991b1b; font-weight: 700; font-size: 14px; }
 </style>
 <script>
-function triggerRestaurantPopup(restaurantName, orderId, driverName) {
-alert("🚨 AFROUNITED SECURE PICKUP VERIFICATION\n\n[Store Location: " + restaurantName + "]\n[Order Reference ID: #" + orderId + "]\n\nINSTRUCTION FOR MERCHANDISE PARTNER:\nBefore handing over the food box/package, you MUST confirm the mobile app profile photo on screen matches driver: " + driverName.toUpperCase() + ".");
+function triggerRestaurantPopup(restaurantName, driverName) {
+alert("🚨 AFROUNITED SECURE PICKUP VERIFICATION\n\n[Store Location: " + restaurantName + "]\n\nINSTRUCTION FOR RESTAURANT PARTNER:\nBefore handing over the container, you MUST confirm the mobile app profile photo matches driver: " + driverName.toUpperCase() + ".");
 }
 function triggerRiderSafetyPopup() {
-alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEHICLE:\n1. Verify the driver's physical face matches the profile shown in your app.\n2. Confirm the vehicle license plate matches your active ride receipt exactly.\n\nNever enter a vehicle if the identity details or driver phone call confirmation do not match!");
+alert("🛡️ ANTI-FRAUD RIDER VEHICLE MATCHING CHECK\n\nBEFORE ENTERING THE VEHICLE:\n1. Verify the driver's face matches the profile portrait in your app.\n2. Confirm the vehicle license plate matches your active ride receipt exactly.");
 }
 </script>
 </head>
@@ -134,9 +155,7 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 <div class="main-content">
 
 <div class="safety-banner">
-<div class="safety-title">
-🛑 <span><strong>Rider Security Protocol Enabled</strong></span>
-</div>
+<div class="safety-title">🛑 <strong>Rider Security Protocols Active</strong></div>
 <button class="btn btn-secure" style="width: auto;" onclick="triggerRiderSafetyPopup()">Test Rider Vehicle Matching Notice</button>
 </div>
 
@@ -157,7 +176,7 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 
 <div class="layout-grid">
 <div class="panel">
-<h3>Active Fleet & Driver Payout Protocols</h3>
+<h3>Active Fleet Drivers & Payout Targets</h3>
 <table>
 <thead>
 <tr>
@@ -166,7 +185,6 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 <th>Payout Method</th>
 <th>Wallet Targets</th>
 <th>Status</th>
-<th>Action</th>
 </tr>
 </thead>
 <tbody>
@@ -175,7 +193,6 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 <td>Taxi</td>
 <td><span class="badge wave">Wave</span></td>
 <td>+224-622-11-22-33</td>
-<td><span class="badge pending">Pending</span></td>
 <td>
 <form action="/admin/drivers/status?id=1&status=approved" method="POST" style="margin:0;">
 <button type="submit" class="btn btn-action">Approve</button>
@@ -188,7 +205,6 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 <td><span class="badge orange">Orange Money</span></td>
 <td>+224-664-44-55-66</td>
 <td><span class="badge approved">Approved</span></td>
-<td><button class="btn" style="padding:4px 8px; font-size:11px; width:auto; background:#64748b;" onclick="triggerRestaurantPopup('Le Ciel Conakry', '8841', 'Mariama Barry')">Test Pickup Check</button></td>
 </tr>
 <tr>
 <td><strong>Amadou Bah</strong></td>
@@ -196,7 +212,6 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 <td><span class="badge wave">Wave</span></td>
 <td>+224-628-99-88-77</td>
 <td><span class="badge approved">Approved</span></td>
-<td><span style="color:#94a3b8; font-size:12px;">Active Monitoring</span></td>
 </tr>
 </tbody>
 </table>
@@ -215,23 +230,86 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 </div>
 <button type="submit" class="btn">Update Master Vault</button>
 </form>
-<div style="background:#f8fafc; padding:10px; border-radius:6px; margin-top:12px; font-size:12px;">
-🍊 Active Orange Vault: %s<br>
-🌊 Active Wave Vault: %s
+</div>
+</div>
+
+<div class="layout-grid">
+<div class="panel">
+<h3>Simulate Restaurant Food Order Dispatch</h3>
+<form action="/admin/add-order" method="POST" style="margin-bottom: 15px;">
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+<div>
+<label>Restaurant Partner</label>
+<select name="restaurant">
+<option value="Le Ciel Conakry">Le Ciel Conakry</option>
+<option value="Restaurant Bembeya">Restaurant Bembeya</option>
+</select>
+</div>
+<div>
+<label>Food Item</label>
+<input type="text" name="item" placeholder="e.g., Attieke, Shawarma" required>
+</div>
+<div style="display:flex; align-items:flex-end;">
+<button type="submit" class="btn" style="background:#16a34a;">Send Active Order</button>
+</div>
+</div>
+</form>
+
+<h4>Active Operations Tracking Pipeline</h4>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Restaurant</th>
+<th>Order Content</th>
+<th>Assigned Courier</th>
+<th>Safety Action</th>
+</tr>
+</thead>
+<tbody>
+`+getOrdersHTML()+`
+</tbody>
+</table>
+</div>
+
+<div class="panel">
+<h3>Simulate App User Wallet Registration</h3>
+<form action="/admin/add-customer" method="POST">
+<div class="form-group">
+<label>Customer Full Name</label>
+<input type="text" name="name" placeholder="John Doe" required>
+</div>
+<div class="form-group">
+<label>Preferred Payment Wallet</label>
+<select name="wallet">
+<option value="Orange Money">Orange Money</option>
+<option value="Wave">Wave</option>
+</select>
+</div>
+<div class="form-group">
+<label>Mobile Number</label>
+<input type="text" name="phone" placeholder="+224..." required>
+</div>
+<button type="submit" class="btn" style="background:#0ea5e9;">Register User Wallet</button>
+</form>
+
+<h4 style="margin-top:15px; margin-bottom:5px;">Registered Accounts</h4>
+<div style="max-height:100px; overflow-y:auto; font-size:12px; background:#f8fafc; padding:8px; border-radius:6px;">
+`+getCustomersHTML()+`
 </div>
 </div>
 </div>
 
-<div class="panel" style="margin-top:20px;">
-<h3>Restaurant Merchant Partners Balance Management</h3>
+<div class="panel">
+<h3>Restaurant Merchant Partners Settlement Ledger</h3>
 <table>
 <thead>
 <tr>
 <th>Merchant ID</th>
 <th>Restaurant Name</th>
 <th>Hub Location</th>
-<th>Aggregated Sales Count</th>
-<th>Preferred Settlement Method</th>
+<th>Aggregated Sales</th>
+<th>Preferred Method</th>
 <th>Merchant Wallet Target</th>
 <th>Platform Payables Remaining</th>
 </tr>
@@ -262,7 +340,34 @@ alert("🛡️ ANTI-FRAUD RIDER IDENTITY SAFETY CHECK\n\nBEFORE ENTERING THE VEH
 </div>
 </body>
 </html>
-`, totalRevenue, totalTaxi, totalDelivery, adminOrangeMoney, adminWave, adminOrangeMoney, adminWave)
+`, totalRevenue, totalTaxi, totalDelivery, adminOrangeMoney, adminWave)
+}
+
+func getOrdersHTML() string {
+html := ""
+for _, o := range liveOrders {
+html += fmt.Sprintf(`
+<tr>
+<td>#%d</td>
+<td style="color:#0284c7; font-weight:600;">📍 %s</td>
+<td>%s</td>
+<td><strong>%s</strong></td>
+<td><button class="btn" style="padding:3px 6px; font-size:11px; background:#475569;" onclick="triggerRestaurantPopup('%s', '%s')">Verify Handshake</button></td>
+</tr>`, o.ID, o.Restaurant, o.Item, o.Driver, o.Restaurant, o.Driver)
+}
+return html
+}
+
+func getCustomersHTML() string {
+html := ""
+for _, c := range customers {
+badgeClass := "wave"
+if c.PaymentType == "Orange Money" {
+badgeClass = "orange"
+}
+html += fmt.Sprintf(`<div>👤 <strong>%s</strong> - <span class="badge %s" style="font-size:10px; padding:2px 5px;">%s</span> (%s)</div>`, c.Name, badgeClass, c.PaymentType, c.Phone)
+}
+return html
 }
 
 func savePayoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -274,6 +379,35 @@ adminOrangeMoney = o
 if w := r.FormValue("wave"); w != "" {
 adminWave = w
 }
+}
+http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func addCustomerHandler(w http.ResponseWriter, r *http.Request) {
+if r.Method == http.MethodPost {
+r.ParseForm()
+newC := Customer{
+Name: r.FormValue("name"),
+PaymentType: r.FormValue("wallet"),
+Phone: r.FormValue("phone"),
+}
+customers = append(customers, newC)
+}
+http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func addOrderHandler(w http.ResponseWriter, r *http.Request) {
+if r.Method == http.MethodPost {
+r.ParseForm()
+newID := 100 + len(liveOrders) + 1
+newO := LiveOrder{
+ID: newID,
+Restaurant: r.FormValue("restaurant"),
+Item: r.FormValue("item"),
+Driver: "Mariama Barry", // Default assigned simulated courier
+Status: "Ready for Pickup",
+}
+liveOrders = append(liveOrders, newO)
 }
 http.Redirect(w, r, "/", http.StatusSeeOther)
 }
