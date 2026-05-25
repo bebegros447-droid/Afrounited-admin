@@ -72,6 +72,7 @@ port = "10000"
 
 http.HandleFunc("/", visualDashboardHandler)
 http.HandleFunc("/admin/save-payout", savePayoutHandler)
+  http.HandleFunc("/api/stats", GetDashboardStats)
 http.HandleFunc("/admin/drivers/status", updateDriverStatusHandler)
 http.HandleFunc("/admin/drivers/clear-payout", clearDriverPayoutHandler)
 http.HandleFunc("/admin/add-customer", addCustomerHandler)
