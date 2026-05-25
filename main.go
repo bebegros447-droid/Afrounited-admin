@@ -405,3 +405,9 @@ break
 }
 http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+// UpdateDriverStatus handles approving or rejecting drivers from the dashboard
+func UpdateDriverStatus(driverID int, newStatus string) string {
+// This will connect to the Pending/Approved/Rejected buttons on your screen
+message := "Driver ID " + strconv.Itoa(driverID) + " status changed to: " + newStatus
+return message
+}
