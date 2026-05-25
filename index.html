@@ -5,26 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Afrounited Admin Dashboard</title>
 <style>
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; padding: 30px; margin: 0; }
+/* General Page Setup */
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+/* -- THE NEW DARK SIDEBAR CSS -- */
+.sidebar { width: 260px; background-color: #0b1437; color: white; padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; }
+.brand { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; color: white; }
+.brand-icon { background: linear-gradient(135deg, #868CFF, #4318FF); width: 30px; height: 30px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+.menu-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; color: #a3aed1; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+.menu-item.active { background-color: #4318FF; color: white; }
+.menu-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
+
+/* -- MAIN CONTENT CSS -- */
+.main-content { flex: 1; padding: 30px; overflow-y: auto; }
 .dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
 .dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
-
 .dashboard-top-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
-
 .stats-group { display: flex; gap: 15px; flex-wrap: wrap; }
-
 .stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); width: 160px; }
-.approval-card { width: 120px; } /* Slightly smaller for the right side */
-
+.approval-card { width: 120px; }
 .stat-header { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #a3aed1; font-weight: 600; margin-bottom: 10px; }
 .dot { height: 8px; width: 8px; border-radius: 50%; }
 .icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-
 .stat-number { font-size: 24px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
 .stat-label { font-size: 13px; color: #a3aed1; font-weight: 600; }
 .growth { font-size: 12px; color: #05cd99; font-weight: 600; margin-top: 5px;}
 
-/* Colors matching your design */
+/* Colors */
 .dot-pending { background-color: #ffb547; }
 .dot-approved { background-color: #05cd99; }
 .dot-rejected { background-color: #ee5d50; }
@@ -36,11 +43,25 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 </head>
 <body>
 
+<div class="sidebar">
+<div class="brand">
+<div class="brand-icon">A</div>
+Afrounited
+</div>
+<div class="menu-item active">📊 Dashboard</div>
+<div class="menu-item">👥 Users</div>
+<div class="menu-item">🚗 Trips</div>
+<div class="menu-item">📦 Orders</div>
+<div class="menu-item">💳 Payments</div>
+<div class="menu-item">✅ Approvals</div>
+<div class="menu-item">⚙️ Settings</div>
+</div>
+
+<div class="main-content">
 <div class="dashboard-title">Dashboard</div>
 <div class="dashboard-subtitle">Monitor and manage your entire platform in real-time</div>
 
 <div class="dashboard-top-row">
-
 <div class="stats-group">
 <div class="stat-card">
 <div class="icon-box bg-blue">U</div>
@@ -85,7 +106,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <div class="stat-label">Drivers</div>
 </div>
 </div>
-
+</div>
 </div>
 
 <script>
