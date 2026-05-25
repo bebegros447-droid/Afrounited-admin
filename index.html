@@ -18,7 +18,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .stat-number { font-size: 32px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
 .stat-label { font-size: 12px; color: #a3aed1; }
 
-/* Custom Colors based on your image */
+/* Custom Colors */
 .dot-pending { background-color: #ffb547; }
 .dot-approved { background-color: #05cd99; }
 .dot-rejected { background-color: #ee5d50; }
@@ -32,22 +32,46 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <div class="stats-row">
 <div class="stat-card">
 <div class="stat-header"><div class="dot dot-pending"></div> Pending</div>
-<div class="stat-number">125</div>
-<div class="stat-label">Orders</div>
+<div class="stat-number" id="pending-count">...</div>
+<div class="stat-label">Drivers</div>
 </div>
 
 <div class="stat-card">
 <div class="stat-header"><div class="dot dot-approved"></div> Approved</div>
-<div class="stat-number">320</div>
-<div class="stat-label">Orders</div>
+<div class="stat-number" id="approved-count">...</div>
+<div class="stat-label">Drivers</div>
 </div>
 
 <div class="stat-card">
 <div class="stat-header"><div class="dot dot-rejected"></div> Rejected</div>
-<div class="stat-number">45</div>
-<div class="stat-label">Orders</div>
+<div class="stat-number" id="rejected-count">...</div>
+<div class="stat-label">Drivers</div>
 </div>
 </div>
+
+<script>
+// This is the "ears" - it listens for the megaphone in main.go!
+async function fetchLiveStats() {
+try {
+// Ask main.go for the latest numbers using the API route
+const response = await fetch('/api/stats');
+const data = await response.json();
+
+// Update the screen with the live numbers
+document.getElementById('pending-count').innerText = data.pending;
+document.getElementById('approved-count').innerText = data.approved;
+document.getElementById('rejected-count').innerText = data.rejected;
+} catch (error) {
+console.error("Waiting for backend connection...", error);
+}
+}
+
+// Run this function immediately when the page loads
+fetchLiveStats();
+
+// Automatically check for new numbers every 5 seconds!
+setInterval(fetchLiveStats, 5000);
+</script>
 
 </body>
 </html>
