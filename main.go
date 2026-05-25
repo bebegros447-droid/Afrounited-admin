@@ -411,3 +411,30 @@ func UpdateDriverStatus(driverID int, newStatus string) string {
 message := "Driver ID " + strconv.Itoa(driverID) + " status changed to: " + newStatus
 return message
 }
+
+
+// GetDashboardStats calculates the live numbers and sends them to the HTML dashboard
+func GetDashboardStats(w http.ResponseWriter, r *http.Request) {
+pendingCount := 0
+approvedCount := 0
+rejectedCount := 0
+
+// Count up all the drivers based on their current status
+for _, d := range drivers {
+if d.Status == "pending" {
+pendingCount++
+} else if d.Status == "approved" {
+approvedCount++
+} else if d.Status == "rejected" {
+rejectedCount++
+}
+}
+
+// Package the numbers into JSON format so the HTML can read it easily
+w.Header().Set("Content-Type", "application/json")
+json.NewEncoder(w).Encode(map[string]int{
+"pending": pendingCount,
+"approved": approvedCount,
+"rejected": rejectedCount,
+})
+}
