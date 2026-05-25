@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afrounited Admin Dashboard</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; padding: 30px; }
+.dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
+
+.stats-row { display: flex; gap: 20px; }
+.stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); width: 140px; }
+
+.stat-header { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #a3aed1; font-weight: 600; margin-bottom: 10px; }
+.dot { height: 8px; width: 8px; border-radius: 50%; }
+
+.stat-number { font-size: 32px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.stat-label { font-size: 12px; color: #a3aed1; }
+
+/* Custom Colors based on your image */
+.dot-pending { background-color: #ffb547; }
+.dot-approved { background-color: #05cd99; }
+.dot-rejected { background-color: #ee5d50; }
+</style>
+</head>
+<body>
+
+<div class="dashboard-title">Dashboard</div>
+<div class="dashboard-subtitle">Monitor and manage your entire platform in real-time</div>
+
+<div class="stats-row">
+<div class="stat-card">
+<div class="stat-header"><div class="dot dot-pending"></div> Pending</div>
+<div class="stat-number">125</div>
+<div class="stat-label">Orders</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-header"><div class="dot dot-approved"></div> Approved</div>
+<div class="stat-number">320</div>
+<div class="stat-label">Orders</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-header"><div class="dot dot-rejected"></div> Rejected</div>
+<div class="stat-number">45</div>
+<div class="stat-label">Orders</div>
+</div>
+</div>
+
+</body>
+</html>
