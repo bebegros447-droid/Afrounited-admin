@@ -5,23 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Afrounited Admin Dashboard</title>
 <style>
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; padding: 30px; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; padding: 30px; margin: 0; }
 .dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
 .dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
 
-.stats-row { display: flex; gap: 20px; }
-.stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); width: 140px; }
+.dashboard-top-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+
+.stats-group { display: flex; gap: 15px; flex-wrap: wrap; }
+
+.stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); width: 160px; }
+.approval-card { width: 120px; } /* Slightly smaller for the right side */
 
 .stat-header { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #a3aed1; font-weight: 600; margin-bottom: 10px; }
 .dot { height: 8px; width: 8px; border-radius: 50%; }
+.icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
 
-.stat-number { font-size: 32px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
-.stat-label { font-size: 12px; color: #a3aed1; }
+.stat-number { font-size: 24px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.stat-label { font-size: 13px; color: #a3aed1; font-weight: 600; }
+.growth { font-size: 12px; color: #05cd99; font-weight: 600; margin-top: 5px;}
 
-/* Custom Colors */
+/* Colors matching your design */
 .dot-pending { background-color: #ffb547; }
 .dot-approved { background-color: #05cd99; }
 .dot-rejected { background-color: #ee5d50; }
+.bg-blue { background-color: #4318FF; }
+.bg-green { background-color: #05cd99; }
+.bg-orange { background-color: #ffb547; }
+.bg-purple { background-color: #8f00ff; }
 </style>
 </head>
 <body>
@@ -29,35 +39,61 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 <div class="dashboard-title">Dashboard</div>
 <div class="dashboard-subtitle">Monitor and manage your entire platform in real-time</div>
 
-<div class="stats-row">
+<div class="dashboard-top-row">
+
+<div class="stats-group">
 <div class="stat-card">
+<div class="icon-box bg-blue">U</div>
+<div class="stat-label">Total Users</div>
+<div class="stat-number">24,850</div>
+<div class="growth">↑ 12.5% vs yesterday</div>
+</div>
+<div class="stat-card">
+<div class="icon-box bg-green">R</div>
+<div class="stat-label">Active Riders</div>
+<div class="stat-number">6,245</div>
+<div class="growth">↑ 8.2% vs yesterday</div>
+</div>
+<div class="stat-card">
+<div class="icon-box bg-orange">D</div>
+<div class="stat-label">Active Drivers</div>
+<div class="stat-number">3,451</div>
+<div class="growth">↑ 7.1% vs yesterday</div>
+</div>
+<div class="stat-card">
+<div class="icon-box bg-purple">E</div>
+<div class="stat-label">Active Restaurants</div>
+<div class="stat-number">1,245</div>
+<div class="growth">↑ 5.4% vs yesterday</div>
+</div>
+</div>
+
+<div class="stats-group">
+<div class="stat-card approval-card">
 <div class="stat-header"><div class="dot dot-pending"></div> Pending</div>
 <div class="stat-number" id="pending-count">...</div>
 <div class="stat-label">Drivers</div>
 </div>
-
-<div class="stat-card">
+<div class="stat-card approval-card">
 <div class="stat-header"><div class="dot dot-approved"></div> Approved</div>
 <div class="stat-number" id="approved-count">...</div>
 <div class="stat-label">Drivers</div>
 </div>
-
-<div class="stat-card">
+<div class="stat-card approval-card">
 <div class="stat-header"><div class="dot dot-rejected"></div> Rejected</div>
 <div class="stat-number" id="rejected-count">...</div>
 <div class="stat-label">Drivers</div>
 </div>
 </div>
 
+</div>
+
 <script>
-// This is the "ears" - it listens for the megaphone in main.go!
+// Live Data Engine connection to main.go
 async function fetchLiveStats() {
 try {
-// Ask main.go for the latest numbers using the API route
 const response = await fetch('/api/stats');
 const data = await response.json();
-
-// Update the screen with the live numbers
 document.getElementById('pending-count').innerText = data.pending;
 document.getElementById('approved-count').innerText = data.approved;
 document.getElementById('rejected-count').innerText = data.rejected;
@@ -65,11 +101,7 @@ document.getElementById('rejected-count').innerText = data.rejected;
 console.error("Waiting for backend connection...", error);
 }
 }
-
-// Run this function immediately when the page loads
 fetchLiveStats();
-
-// Automatically check for new numbers every 5 seconds!
 setInterval(fetchLiveStats, 5000);
 </script>
 
