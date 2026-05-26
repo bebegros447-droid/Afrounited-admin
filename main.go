@@ -82,6 +82,9 @@ http.ServeFile(w, r, "trips.html")
   http.HandleFunc("/orders", func(w http.ResponseWriter, r *http.Request) {
 http.ServeFile(w, r, "orders.html")
 })
+  http.HandleFunc("/payments", func(w http.ResponseWriter, r *http.Request) {
+http.ServeFile(w, r, "payments.html")
+})
 http.HandleFunc("/admin/save-payout", savePayoutHandler)
 http.HandleFunc("/api/stats", GetDashboardStats)
 http.HandleFunc("/admin/drivers/status", updateDriverStatusHandler)
