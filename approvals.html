@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afrounited - Approvals</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+.sidebar { width: 260px; background-color: #0b1437; color: white; padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; }
+.brand { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; color: white; }
+.brand-icon { background: linear-gradient(135deg, #868CFF, #4318FF); width: 30px; height: 30px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+.menu-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; color: #a3aed1; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+.menu-item.active { background-color: #4318FF; color: white; }
+.menu-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
+
+.main-content { flex: 1; padding: 30px; overflow-y: auto; }
+.dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
+
+.table-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { text-align: left; padding: 12px 10px; font-size: 13px; color: #a3aed1; border-bottom: 1px solid #f4f7fe; }
+td { padding: 15px 10px; font-size: 14px; color: #2b3674; font-weight: 600; border-bottom: 1px solid #f4f7fe; }
+
+.btn-approve { background: #05cd99; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px; }
+.btn-reject { background: #ee5d50; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px; margin-left: 5px;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<div class="brand"><div class="brand-icon">A</div>Afrounited</div>
+<div class="menu-item" onclick="window.location.href='/'">📊 Dashboard</div>
+<div class="menu-item" onclick="window.location.href='/users'">👥 Users</div>
+<div class="menu-item" onclick="window.location.href='/trips'">🚗 Trips</div>
+<div class="menu-item" onclick="window.location.href='/orders'">📦 Orders</div>
+<div class="menu-item" onclick="window.location.href='/payments'">💳 Payments</div>
+<div class="menu-item active" onclick="window.location.href='/approvals'">✅ Approvals</div>
+<div class="menu-item" onclick="window.location.href='/settings'">⚙️ Settings</div>
+</div>
+
+<div class="main-content">
+<div class="dashboard-title">Security & Approvals</div>
+<div class="dashboard-subtitle">Review driver identity documents and vehicle registrations</div>
+
+<div class="table-card">
+<table>
+<tr>
+<th>Applicant Name</th>
+<th>Region</th>
+<th>Document Type</th>
+<th>Submission Date</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>Mamadou Sylla</td>
+<td>Conakry, GN</td>
+<td>National ID Card</td>
+<td>Today, 08:15 AM</td>
+<td>
+<button class="btn-approve">Approve</button>
+<button class="btn-reject">Reject</button>
+</td>
+</tr>
+<tr>
+<td>Kofi Mensah</td>
+<td>Accra, GH</td>
+<td>Vehicle Registration</td>
+<td>Yesterday</td>
+<td>
+<button class="btn-approve">Approve</button>
+<button class="btn-reject">Reject</button>
+</td>
+</tr>
+</table>
+</div>
+</div>
+
+</body>
+</html>
