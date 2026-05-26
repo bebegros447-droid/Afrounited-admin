@@ -10,21 +10,10 @@ _DriverAppRegistrationState createState() => _DriverAppRegistrationState();
 class _DriverAppRegistrationState extends State<DriverAppRegistration> {
 final _formKey = GlobalKey<FormState>();
 final TextEditingController _nameController = TextEditingController();
-
-  import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-class DriverAppRegistration extends StatefulWidget {
-@override
-_DriverAppRegistrationState createState() => _DriverAppRegistrationState();
-}
-
-class _DriverAppRegistrationState extends State<DriverAppRegistration> {
-final _formKey = GlobalKey<FormState>();
-final TextEditingController _nameController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
+
+bool isOnline = false; // By default, the driver starts offline
 
 Future<void> sendLiveLocation() async {
 final String serverUrl = 'https://afrounited-admin-1.onrender.com/api/driver/update';
@@ -54,13 +43,7 @@ print('❌ Connection failed: $e');
 }
 }
 
-@override
-Widget build(BuildContext context) {
-return Scaffold(
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _phoneController = TextEditingController();
 
-@override
 Widget build(BuildContext context) {
 return Scaffold(
 backgroundColor: Color(0xFFF4F7F4),
@@ -189,21 +172,37 @@ prefixIcon: Icon(Icons.phone, color: Color(0xFF2E5A27)),
 ),
 SizedBox(height: 30),
 
-// Submit Button
+// THE UBER-STYLE SMART BUTTON
 SizedBox(
 width: double.infinity,
-height: 50,
+height: 55,
 child: ElevatedButton(
 style: ElevatedButton.styleFrom(
-backgroundColor: Color(0xFF2E5A27),
-shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+backgroundColor: isOnline ? Colors.red : Color(0xFF2E5A27), // Red if online, Green if offline
+shape: RoundedRectangleBorder(
+borderRadius: BorderRadius.circular(8),
+),
 ),
 onPressed: () {
-print("Registering Driver: ${_phoneController.text}");
+// This is the magic flip switch!
+setState(() {
+isOnline = !isOnline;
+});
+
+if (isOnline) {
+print('🚀 Ignition! Driver went ONLINE.');
+sendLiveLocation(); // FIRE THE SIGNAL!
+} else {
+print('💤 Driver went OFFLINE.');
+}
 },
 child: Text(
-'Continuer',
-style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+isOnline ? 'GO OFFLINE (STOP REQUESTS)' : 'GO ONLINE',
+style: TextStyle(
+fontSize: 16,
+fontWeight: FontWeight.bold,
+color: Colors.white,
+),
 ),
 ),
 ),
