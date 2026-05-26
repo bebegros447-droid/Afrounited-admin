@@ -31,7 +31,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); width: 160px; }
 .approval-card { width: 120px; }
 .map-card { flex: 2; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; }
-.feed-card { flex: 1; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; overflow-y: auto; }
+.feed-card { flex: 1; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; overflow: hidden; }
 .financial-card { flex: 1; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 .table-card { flex: 2; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 
@@ -44,25 +44,23 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
 .growth { font-size: 12px; color: #05cd99; font-weight: 600; margin-top: 5px;}
 .section-title { font-size: 16px; font-weight: bold; color: #2b3674; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
 .view-all { font-size: 12px; color: #4318FF; font-weight: 600; cursor: pointer; }
-.map-placeholder { flex: 1; background-color: #e2e8f0; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: #a3aed1; font-weight: 600; font-size: 18px; border: 2px dashed #cbd5e1; }
 
-/* Feed & Table */
-.feed-item { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #f4f7fe; }
-.feed-item:last-child { border-bottom: none; }
-.feed-icon { width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+/* Feed Items */
+.feed-item { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #f4f7fe; animation: slideDown 0.5s ease-out; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.feed-icon { width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; min-width: 35px; }
 .feed-info { flex: 1; }
 .feed-title { font-size: 14px; font-weight: bold; color: #2b3674; margin-bottom: 3px; }
 .feed-desc { font-size: 12px; color: #a3aed1; }
 .feed-time { font-size: 11px; color: #a3aed1; font-weight: bold; text-align: right; }
 
+/* Tables & Charts */
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 th { text-align: left; padding: 10px; font-size: 13px; color: #a3aed1; border-bottom: 1px solid #f4f7fe; }
 td { padding: 12px 10px; font-size: 14px; color: #2b3674; font-weight: 600; border-bottom: 1px solid #f4f7fe; }
 .status-badge { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
 .status-success { background-color: rgba(5, 205, 153, 0.1); color: #05cd99; }
 .status-pending { background-color: rgba(255, 181, 71, 0.1); color: #ffb547; }
-
-/* Donut Chart Trick */
 .donut-chart { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#4318FF 0% 52%, #ffb547 52% 85%, #05cd99 85% 100%); display: flex; justify-content: center; align-items: center; margin: 20px auto; }
 .donut-hole { width: 80px; height: 80px; background-color: white; border-radius: 50%; }
 
@@ -82,10 +80,7 @@ td { padding: 12px 10px; font-size: 14px; color: #2b3674; font-weight: 600; bord
 <body>
 
 <div class="sidebar">
-<div class="brand">
-<div class="brand-icon">A</div>
-Afrounited
-</div>
+<div class="brand"><div class="brand-icon">A</div>Afrounited</div>
 <div class="menu-item active">📊 Dashboard</div>
 <div class="menu-item">👥 Users</div>
 <div class="menu-item">🚗 Trips</div>
@@ -101,48 +96,15 @@ Afrounited
 
 <div class="dashboard-top-row">
 <div class="stats-group">
-<div class="stat-card">
-<div class="icon-box bg-blue">U</div>
-<div class="stat-label">Total Users</div>
-<div class="stat-number">24,850</div>
-<div class="growth">↑ 12.5% vs yesterday</div>
+<div class="stat-card"><div class="icon-box bg-blue">U</div><div class="stat-label">Total Users</div><div class="stat-number">24,850</div><div class="growth">↑ 12.5% vs yesterday</div></div>
+<div class="stat-card"><div class="icon-box bg-green">R</div><div class="stat-label">Active Riders</div><div class="stat-number">6,245</div><div class="growth">↑ 8.2% vs yesterday</div></div>
+<div class="stat-card"><div class="icon-box bg-orange">D</div><div class="stat-label">Active Drivers</div><div class="stat-number">3,451</div><div class="growth">↑ 7.1% vs yesterday</div></div>
+<div class="stat-card"><div class="icon-box bg-purple">E</div><div class="stat-label">Active Restaurants</div><div class="stat-number">1,245</div><div class="growth">↑ 5.4% vs yesterday</div></div>
 </div>
-<div class="stat-card">
-<div class="icon-box bg-green">R</div>
-<div class="stat-label">Active Riders</div>
-<div class="stat-number">6,245</div>
-<div class="growth">↑ 8.2% vs yesterday</div>
-</div>
-<div class="stat-card">
-<div class="icon-box bg-orange">D</div>
-<div class="stat-label">Active Drivers</div>
-<div class="stat-number">3,451</div>
-<div class="growth">↑ 7.1% vs yesterday</div>
-</div>
-<div class="stat-card">
-<div class="icon-box bg-purple">E</div>
-<div class="stat-label">Active Restaurants</div>
-<div class="stat-number">1,245</div>
-<div class="growth">↑ 5.4% vs yesterday</div>
-</div>
-</div>
-
 <div class="stats-group">
-<div class="stat-card approval-card">
-<div class="stat-header"><div class="dot dot-pending"></div> Pending</div>
-<div class="stat-number" id="pending-count">...</div>
-<div class="stat-label">Drivers</div>
-</div>
-<div class="stat-card approval-card">
-<div class="stat-header"><div class="dot dot-approved"></div> Approved</div>
-<div class="stat-number" id="approved-count">...</div>
-<div class="stat-label">Drivers</div>
-</div>
-<div class="stat-card approval-card">
-<div class="stat-header"><div class="dot dot-rejected"></div> Rejected</div>
-<div class="stat-number" id="rejected-count">...</div>
-<div class="stat-label">Drivers</div>
-</div>
+<div class="stat-card approval-card"><div class="stat-header"><div class="dot dot-pending"></div> Pending</div><div class="stat-number" id="pending-count">...</div><div class="stat-label">Drivers</div></div>
+<div class="stat-card approval-card"><div class="stat-header"><div class="dot dot-approved"></div> Approved</div><div class="stat-number" id="approved-count">...</div><div class="stat-label">Drivers</div></div>
+<div class="stat-card approval-card"><div class="stat-header"><div class="dot dot-rejected"></div> Rejected</div><div class="stat-number" id="rejected-count">...</div><div class="stat-label">Drivers</div></div>
 </div>
 </div>
 
@@ -154,62 +116,31 @@ Afrounited
 
 <div class="feed-card">
 <div class="section-title">Live Orders Feed <span class="view-all">View All</span></div>
-<div class="feed-item"><div class="feed-icon bg-light-orange">🍔</div><div class="feed-info"><div class="feed-title">#ORD101 - Le Ciel Conakry</div><div class="feed-desc">Driver: Mariama Barry</div></div><div class="feed-time">2 min ago</div></div>
-<div class="feed-item"><div class="feed-icon bg-light-green">🛵</div><div class="feed-info"><div class="feed-title">#ORD102 - Restaurant Bembeya</div><div class="feed-desc">Driver: Amadou Bah</div></div><div class="feed-time">5 min ago</div></div>
-<div class="feed-item"><div class="feed-icon bg-light-blue">📦</div><div class="feed-info"><div class="feed-title">#ORD103 - Fulamadina Delivery</div><div class="feed-desc">Driver: Alpha Diallo</div></div><div class="feed-time">12 min ago</div></div>
+<div id="live-feed-container"></div>
 </div>
 </div>
 
 <div class="dashboard-bottom-row">
-
 <div class="financial-card">
 <div class="section-title">Payment Overview</div>
-<div class="stat-number">$38,920.40</div>
-<div class="growth">↑ 13.3% vs yesterday</div>
+<div class="stat-number">$38,920.40</div><div class="growth">↑ 13.3% vs yesterday</div>
 <div class="donut-chart"><div class="donut-hole"></div></div>
 <div style="text-align: center; font-size: 12px; color: #a3aed1;">🔵 Orange Money (52%) &nbsp; 🟠 Wave (33%)</div>
 </div>
-
 <div class="table-card">
-<div class="section-title">Recent Transactions <span class="view-all">View All Transactions</span></div>
+<div class="section-title">Recent Transactions <span class="view-all">View All</span></div>
 <table>
-<tr>
-<th>Order ID</th>
-<th>User</th>
-<th>Payment Method</th>
-<th>Amount</th>
-<th>Status</th>
-</tr>
-<tr>
-<td>#ORD124578</td>
-<td>Ismaila Diallo</td>
-<td>Orange Money</td>
-<td>$25.60</td>
-<td><span class="status-badge status-success">Success</span></td>
-</tr>
-<tr>
-<td>#ORD124577</td>
-<td>Fatoumata Sylla</td>
-<td>Wave</td>
-<td>$18.90</td>
-<td><span class="status-badge status-success">Success</span></td>
-</tr>
-<tr>
-<td>#ORD124576</td>
-<td>Mamadou Keita</td>
-<td>Cash</td>
-<td>$22.45</td>
-<td><span class="status-badge status-pending">Pending</span></td>
-</tr>
+<tr><th>Order ID</th><th>User</th><th>Payment Method</th><th>Amount</th><th>Status</th></tr>
+<tr><td>#ORD124578</td><td>Ismaila Diallo</td><td>Orange Money</td><td>$25.60</td><td><span class="status-badge status-success">Success</span></td></tr>
+<tr><td>#ORD124577</td><td>Fatoumata Sylla</td><td>Wave</td><td>$18.90</td><td><span class="status-badge status-success">Success</span></td></tr>
+<tr><td>#ORD124576</td><td>Mamadou Keita</td><td>Cash</td><td>$22.45</td><td><span class="status-badge status-pending">Pending</span></td></tr>
 </table>
 </div>
-
 </div>
-
 </div>
 
 <script>
-// Live Data Engine connection to main.go
+// 1. BACKEND ENGINE: Pulls real approval stats from your Go Server
 async function fetchLiveStats() {
 try {
 const response = await fetch('/api/stats');
@@ -223,7 +154,59 @@ console.error("Waiting for backend connection...", error);
 }
 fetchLiveStats();
 setInterval(fetchLiveStats, 5000);
-</script>
 
+// 2. FRONTEND ENGINE: Generates live incoming orders across Africa!
+const orderTypes = [
+{ icon: "🍔", name: "Jollof Rice", color: "bg-light-orange" },
+{ icon: "🛵", name: "Document Courier", color: "bg-light-green" },
+{ icon: "📦", name: "Package Delivery", color: "bg-light-blue" },
+{ icon: "🍛", name: "Yassa Poulet", color: "bg-light-orange" },
+{ icon: "🛍️", name: "Pharmacy Run", color: "bg-light-green" }
+];
+const drivers = ["Mariama B.", "Amadou B.", "Alpha D.", "Fatoumata S.", "Oumar K.", "Aisha T.", "Kwame O."];
+const locations = ["Conakry, GN", "Dakar, SN", "Lagos, NG", "Nairobi, KE", "Abidjan, CI", "Accra, GH"];
+
+let orderCount = 104;
+
+function injectNewOrder() {
+const container = document.getElementById('live-feed-container');
+
+// Generate random data
+const randomOrder = orderTypes[Math.floor(Math.random() * orderTypes.length)];
+const randomDriver = drivers[Math.floor(Math.random() * drivers.length)];
+const randomLoc = locations[Math.floor(Math.random() * locations.length)];
+
+// Create the HTML block
+const newOrder = document.createElement('div');
+newOrder.className = 'feed-item';
+newOrder.innerHTML = `
+<div class="feed-icon ${randomOrder.color}">${randomOrder.icon}</div>
+<div class="feed-info">
+<div class="feed-title">#ORD${orderCount} - ${randomLoc}</div>
+<div class="feed-desc">${randomOrder.name} • Driver: ${randomDriver}</div>
+</div>
+<div class="feed-time" style="color: #05cd99;">New</div>
+`;
+
+// Drop it at the top of the feed!
+container.insertBefore(newOrder, container.firstChild);
+
+// Remove the oldest order so the list doesn't get too long (keep 4 max)
+if (container.children.length > 4) {
+container.removeChild(container.lastChild);
+}
+
+orderCount++;
+}
+
+// Add 4 initial orders immediately so the feed isn't empty
+injectNewOrder();
+setTimeout(injectNewOrder, 500);
+setTimeout(injectNewOrder, 1000);
+setTimeout(injectNewOrder, 1500);
+
+// Magic trick: Add a brand new order every 5 seconds continuously!
+setInterval(injectNewOrder, 5000);
+</script>
 </body>
 </html>
