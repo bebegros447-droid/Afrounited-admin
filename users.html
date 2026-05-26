@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afrounited - User Management</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+/* Sidebar CSS */
+.sidebar { width: 260px; background-color: #0b1437; color: white; padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; }
+.brand { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; color: white; }
+.brand-icon { background: linear-gradient(135deg, #868CFF, #4318FF); width: 30px; height: 30px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+.menu-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; color: #a3aed1; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+.menu-item.active { background-color: #4318FF; color: white; }
+.menu-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
+
+/* Main Content CSS */
+.main-content { flex: 1; padding: 30px; overflow-y: auto; }
+.dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
+
+/* Table Card */
+.table-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-top: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { text-align: left; padding: 12px 10px; font-size: 13px; color: #a3aed1; border-bottom: 1px solid #f4f7fe; }
+td { padding: 15px 10px; font-size: 14px; color: #2b3674; font-weight: 600; border-bottom: 1px solid #f4f7fe; }
+
+.role-badge { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+.role-driver { background-color: rgba(255, 181, 71, 0.1); color: #ffb547; }
+.role-rider { background-color: rgba(67, 24, 255, 0.1); color: #4318FF; }
+.role-restaurant { background-color: rgba(5, 205, 153, 0.1); color: #05cd99; }
+
+.action-btn { background-color: #f4f7fe; color: #2b3674; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px; }
+.action-btn:hover { background-color: #e2e8f0; }
+.btn-danger { color: #ee5d50; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<div class="brand"><div class="brand-icon">A</div>Afrounited</div>
+<div class="menu-item" onclick="window.location.href='/'">📊 Dashboard</div>
+<div class="menu-item active" onclick="window.location.href='/users'">👥 Users</div>
+<div class="menu-item">🚗 Trips</div>
+<div class="menu-item">📦 Orders</div>
+<div class="menu-item">💳 Payments</div>
+<div class="menu-item">✅ Approvals</div>
+<div class="menu-item">⚙️ Settings</div>
+</div>
+
+<div class="main-content">
+<div class="dashboard-title">User Management</div>
+<div class="dashboard-subtitle">View, suspend, or manage accounts across the platform</div>
+
+<div class="table-card">
+<table>
+<tr>
+<th>Name</th>
+<th>Location</th>
+<th>Phone Number</th>
+<th>Account Type</th>
+<th>Actions</th>
+</tr>
+<tr>
+<td>Alpha Diallo</td>
+<td>Conakry, GN</td>
+<td>+224-622-11-22-33</td>
+<td><span class="role-badge role-driver">Driver</span></td>
+<td><button class="action-btn">Edit</button> <button class="action-btn btn-danger">Suspend</button></td>
+</tr>
+<tr>
+<td>Fatoumata Sylla</td>
+<td>Dakar, SN</td>
+<td>+221-77-123-45-67</td>
+<td><span class="role-badge role-rider">Rider</span></td>
+<td><button class="action-btn">Edit</button> <button class="action-btn btn-danger">Suspend</button></td>
+</tr>
+<tr>
+<td>Restaurant Bembeya</td>
+<td>Conakry, GN</td>
+<td>+224-628-99-88-77</td>
+<td><span class="role-badge role-restaurant">Restaurant</span></td>
+<td><button class="action-btn">Edit</button> <button class="action-btn btn-danger">Suspend</button></td>
+</tr>
+</table>
+</div>
+</div>
+
+</body>
+</html>
