@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DriverAppRegistration extends StatefulWidget {
 @override
@@ -8,6 +10,53 @@ _DriverAppRegistrationState createState() => _DriverAppRegistrationState();
 class _DriverAppRegistrationState extends State<DriverAppRegistration> {
 final _formKey = GlobalKey<FormState>();
 final TextEditingController _nameController = TextEditingController();
+
+  import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class DriverAppRegistration extends StatefulWidget {
+@override
+_DriverAppRegistrationState createState() => _DriverAppRegistrationState();
+}
+
+class _DriverAppRegistrationState extends State<DriverAppRegistration> {
+final _formKey = GlobalKey<FormState>();
+final TextEditingController _nameController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _phoneController = TextEditingController();
+
+Future<void> sendLiveLocation() async {
+final String serverUrl = 'https://afrounited-admin-1.onrender.com/api/driver/update';
+
+try {
+print('Transmitting signal to HQ...');
+
+final response = await http.post(
+Uri.parse(serverUrl),
+headers: {'Content-Type': 'application/json'},
+body: jsonEncode({
+'driver_id': 'DRV-001',
+'driver_name': 'Alpha Diallo',
+'location': 'Kagbelen, Guinea',
+'status': 'online'
+}),
+);
+
+if (response.statusCode == 200) {
+print('✅ Success: Dashboard received the signal!');
+print('Server Response: ${response.body}');
+} else {
+print('❌ Error: Dashboard rejected the signal.');
+}
+} catch (e) {
+print('❌ Connection failed: $e');
+}
+}
+
+@override
+Widget build(BuildContext context) {
+return Scaffold(
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
 
