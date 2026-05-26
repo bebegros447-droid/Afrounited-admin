@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afrounited - Settings</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+.sidebar { width: 260px; background-color: #0b1437; color: white; padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; }
+.brand { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; color: white; }
+.brand-icon { background: linear-gradient(135deg, #868CFF, #4318FF); width: 30px; height: 30px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+.menu-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; color: #a3aed1; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+.menu-item.active { background-color: #4318FF; color: white; }
+.menu-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
+
+.main-content { flex: 1; padding: 30px; overflow-y: auto; }
+.dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
+
+.settings-card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); max-width: 600px; }
+.setting-group { margin-bottom: 20px; }
+.setting-group label { display: block; font-size: 14px; color: #2b3674; font-weight: 600; margin-bottom: 8px; }
+.setting-group input { width: 100%; padding: 10px; border: 1px solid #e0e5f2; border-radius: 8px; font-size: 14px; color: #a3aed1; box-sizing: border-box; }
+.save-btn { background: #4318FF; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; mt-10}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<div class="brand"><div class="brand-icon">A</div>Afrounited</div>
+<div class="menu-item" onclick="window.location.href='/'">📊 Dashboard</div>
+<div class="menu-item" onclick="window.location.href='/users'">👥 Users</div>
+<div class="menu-item" onclick="window.location.href='/trips'">🚗 Trips</div>
+<div class="menu-item" onclick="window.location.href='/orders'">📦 Orders</div>
+<div class="menu-item" onclick="window.location.href='/payments'">💳 Payments</div>
+<div class="menu-item" onclick="window.location.href='/approvals'">✅ Approvals</div>
+<div class="menu-item active" onclick="window.location.href='/settings'">⚙️ Settings</div>
+</div>
+
+<div class="main-content">
+<div class="dashboard-title">System Settings</div>
+<div class="dashboard-subtitle">Configure global application variables and business details</div>
+
+<div class="settings-card">
+<div class="setting-group">
+<label>Platform Commission Rate (%)</label>
+<input type="text" value="15%">
+</div>
+<div class="setting-group">
+<label>Guinea SARL Physical HQ Address (For Google Verification)</label>
+<input type="text" value="[Your Physical Address Here], Kagbelen, Guinea">
+</div>
+<div class="setting-group">
+<label>Driver Radius Limit (KM)</label>
+<input type="text" value="10">
+</div>
+<button class="save-btn">Save Configuration</button>
+</div>
+</div>
+
+</body>
+</html>
