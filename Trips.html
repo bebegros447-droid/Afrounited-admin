@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afrounited - Live Trips</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fe; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+/* Sidebar CSS */
+.sidebar { width: 260px; background-color: #0b1437; color: white; padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; }
+.brand { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; color: white; }
+.brand-icon { background: linear-gradient(135deg, #868CFF, #4318FF); width: 30px; height: 30px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+.menu-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 15px; color: #a3aed1; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+.menu-item.active { background-color: #4318FF; color: white; }
+.menu-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
+
+/* Main Content CSS */
+.main-content { flex: 1; padding: 30px; overflow-y: auto; }
+.dashboard-title { font-size: 28px; font-weight: bold; color: #2b3674; margin-bottom: 5px; }
+.dashboard-subtitle { font-size: 14px; color: #a3aed1; margin-bottom: 30px; }
+
+/* Layout */
+.stats-row { display: flex; gap: 20px; margin-bottom: 20px; }
+.stat-box { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-left: 5px solid #4318FF; }
+.stat-box.green { border-left-color: #05cd99; }
+.stat-box.orange { border-left-color: #ffb547; }
+.stat-title { font-size: 13px; color: #a3aed1; font-weight: 600; margin-bottom: 5px; }
+.stat-value { font-size: 24px; font-weight: bold; color: #2b3674; }
+
+/* Table Card */
+.table-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { text-align: left; padding: 12px 10px; font-size: 13px; color: #a3aed1; border-bottom: 1px solid #f4f7fe; }
+td { padding: 15px 10px; font-size: 14px; color: #2b3674; font-weight: 600; border-bottom: 1px solid #f4f7fe; }
+
+.status-badge { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+.status-transit { background-color: rgba(67, 24, 255, 0.1); color: #4318FF; }
+.status-arriving { background-color: rgba(255, 181, 71, 0.1); color: #ffb547; }
+.status-completed { background-color: rgba(5, 205, 153, 0.1); color: #05cd99; }
+
+.route { font-size: 13px; color: #a3aed1; font-weight: bold; }
+.arrow { color: #4318FF; margin: 0 5px; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<div class="brand"><div class="brand-icon">A</div>Afrounited</div>
+<div class="menu-item" onclick="window.location.href='/'">📊 Dashboard</div>
+<div class="menu-item" onclick="window.location.href='/users'">👥 Users</div>
+<div class="menu-item active" onclick="window.location.href='/trips'">🚗 Trips</div>
+<div class="menu-item">📦 Orders</div>
+<div class="menu-item">💳 Payments</div>
+<div class="menu-item">✅ Approvals</div>
+<div class="menu-item">⚙️ Settings</div>
+</div>
+
+<div class="main-content">
+<div class="dashboard-title">Live Trips & Tracking</div>
+<div class="dashboard-subtitle">Monitor ongoing rides and fleet activity across all regions</div>
+
+<div class="stats-row">
+<div class="stat-box"><div class="stat-title">Active Rides</div><div class="stat-value">342</div></div>
+<div class="stat-box green"><div class="stat-title">Completed Today</div><div class="stat-value">1,204</div></div>
+<div class="stat-box orange"><div class="stat-title">Drivers Available</div><div class="stat-value">85</div></div>
+</div>
+
+<div class="table-card">
+<table>
+<tr>
+<th>Trip ID</th>
+<th>Passenger</th>
+<th>Driver</th>
+<th>Route</th>
+<th>Fare</th>
+<th>Status</th>
+</tr>
+<tr>
+<td>#TRP-8801</td>
+<td>Ousmane B.</td>
+<td>Alpha Diallo</td>
+<td><span class="route">Dixinn <span class="arrow">➔</span> Kaloum</span></td>
+<td>25,000 GNF</td>
+<td><span class="status-badge status-transit">En Route</span></td>
+</tr>
+<tr>
+<td>#TRP-8802</td>
+<td>Aisha T.</td>
+<td>Kwame O.</td>
+<td><span class="route">Plateau <span class="arrow">➔</span> Cocody</span></td>
+<td>3,000 CFA</td>
+<td><span class="status-badge status-arriving">Arriving</span></td>
+</tr>
+<tr>
+<td>#TRP-8803</td>
+<td>Mamadou K.</td>
+<td>Oumar K.</td>
+<td><span class="route">Dakar Plateau <span class="arrow">➔</span> Almadies</span></td>
+<td>4,500 CFA</td>
+<td><span class="status-badge status-completed">Completed</span></td>
+</tr>
+</table>
+</div>
+</div>
+
+</body>
+</html>
