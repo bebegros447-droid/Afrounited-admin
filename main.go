@@ -96,6 +96,14 @@ http.ServeFile(w, r, "settings.html")
 http.HandleFunc("/privacy", func(w http.ResponseWriter, r *http.Request) {
 http.ServeFile(w, r, "privacy.html")
 })
+  http.HandleFunc("/api/driver/update", func(w http.ResponseWriter, r *http.Request) {
+// This prints a message to your Render logs so you can see it working in real-time
+fmt.Println("🚨 BEEP! Live signal received from a driver app!")
+
+// This sends a success message back to the driver's phone
+w.Header().Set("Content-Type", "application/json")
+w.Write([]byte(`{"status": "success", "message": "Signal received by Afrounited HQ"}`))
+})
 http.HandleFunc("/admin/save-payout", savePayoutHandler)
 http.HandleFunc("/api/stats", GetDashboardStats)
 http.HandleFunc("/admin/drivers/status", updateDriverStatusHandler)
