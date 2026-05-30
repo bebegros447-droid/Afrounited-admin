@@ -104,7 +104,39 @@ fmt.Println("🚨 BEEP! Live signal received from a driver app!")
 w.Header().Set("Content-Type", "application/json")
 w.Write([]byte(`{"status": "success", "message": "Signal received by Afrounited HQ"}`))
 })
-http.HandleFunc("/admin/save-payout", savePayoutHandler)
+http.HandleFunc("/api/driver/register", func(w http.ResponseWriter, r *http.Request) {
+// 1. We only want to accept POST requests (data being sent to us)
+if r.Method != http.MethodPost {
+http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+return
+}
+
+// 2. Create a temporary blank Driver to hold the incoming data
+var newDriver Driver
+err := json.NewDecoder(r.Body).Decode(&newDriver)
+if err != nil {
+http.Error(w, "Failed to read application data", http.StatusBadRequest)
+return
+}
+
+// 3. THE BOSS LOGIC: Set the backend-controlled fields!
+newDriver.ID = len(drivers) + 1 // Generate a unique ID
+newDriver.Status = "pending" // They MUST wait for your approval!
+newDriver.Earnings = 0.0 // Starting balance is strictly zero
+
+// 4. Save them to the database (our active memory array)
+drivers = append(drivers, newDriver)
+
+// 5. Print a visual alert to your Render server logs
+fmt.Printf("✅ NEW APPLICATION: %s wants to join as a %s! Wallet: %s\n", newDriver.Name, newDriver.Service, newDriver.PayoutType)
+
+// 6. Send a secure handshake back to the Green Worker app
+w.Header().Set("Content-Type", "application/json")
+w.Write([]byte(`{"status": "success", "message": "Application received! Please wait for Afrounited admin approval."}`))
+})
+
+  
+  http.HandleFunc("/admin/save-payout", savePayoutHandler)
 http.HandleFunc("/api/stats", GetDashboardStats)
 http.HandleFunc("/admin/drivers/status", updateDriverStatusHandler)
 http.HandleFunc("/admin/drivers/clear-payout", clearDriverPayoutHandler)
