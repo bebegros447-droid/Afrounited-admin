@@ -79,7 +79,7 @@ icon: Icon(Icons.arrow_back, color: Colors.white),
 onPressed: () {},
 ),
 title: Text(
-'Créer un Compte Afrounited',
+'Créer un Compte Afro-United Dr',
 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
 ),
 centerTitle: true,
