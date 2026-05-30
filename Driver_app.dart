@@ -425,6 +425,50 @@ setState(() { hasStorePhotos = true; }); // Magic: Flips false to true!
 SizedBox(height: 12),
 ],
 SizedBox(height: 24),
+// 💰 THE PAYOUT WALLET (Everyone sees this)
+Text(
+'Payout Method',
+style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+),
+SizedBox(height: 16),
+
+// The Wallet Dropdown
+DropdownButtonFormField<String>(
+value: selectedWallet,
+decoration: InputDecoration(
+labelText: 'Select Mobile Wallet',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+prefixIcon: Icon(Icons.account_balance_wallet, color: Color(0xFF2E5A27)),
+),
+items: ['Orange Money', 'Wave', 'MTN'].map((String wallet) {
+return DropdownMenuItem<String>(
+value: wallet,
+child: Text(wallet),
+);
+}).toList(),
+onChanged: (String? newValue) {
+setState(() {
+selectedWallet = newValue!;
+});
+},
+),
+SizedBox(height: 16),
+
+// The Wallet Account Number
+TextFormField(
+controller: _walletNumberController,
+keyboardType: TextInputType.phone,
+decoration: InputDecoration(
+labelText: 'Wallet Phone Number',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+prefixIcon: Icon(Icons.phone_android, color: Color(0xFF2E5A27)),
+),
+),
+SizedBox(height: 32),
 // THE UBER-STYLE SMART BUTTON
 SizedBox(
 width: double.infinity,
