@@ -20,6 +20,9 @@ final TextEditingController _regionController = TextEditingController();
 final TextEditingController _vehicleMakeController = TextEditingController();
 final TextEditingController _vehicleModelController = TextEditingController();
 final TextEditingController _plateNumberController = TextEditingController();
+  // The Vehicle Dropdown Memory
+String vehicleType = 'Car'; // Defaults to Car
+final TextEditingController _vehicleYearController = TextEditingController();
 
 // Business Memory (For Stores & Restaurants)
 final TextEditingController _storeNameController = TextEditingController();
