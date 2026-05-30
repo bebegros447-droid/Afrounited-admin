@@ -258,6 +258,32 @@ Text(
 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
 ),
 SizedBox(height: 16),
+
+// THE VEHICLE DROPDOWN
+DropdownButtonFormField<String>(
+value: vehicleType,
+decoration: InputDecoration(
+labelText: 'Vehicle Type',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+items: ['Car', 'Motorcycle', 'Scooter', 'E-bike'].map((String type) {
+return DropdownMenuItem<String>(
+value: type,
+child: Text(type),
+);
+}).toList(),
+onChanged: (String? newValue) {
+setState(() {
+vehicleType = newValue!;
+});
+},
+),
+SizedBox(height: 16),
+
+// If it's NOT an E-bike, ask for Make and Plate Number
+if (vehicleType != 'E-bike') ...[
 TextFormField(
 controller: _vehicleMakeController,
 decoration: InputDecoration(
@@ -277,6 +303,21 @@ fillColor: Colors.white,
 filled: true,
 ),
 ),
+],
+
+// If it IS an E-bike, ONLY ask for the Year
+if (vehicleType == 'E-bike') ...[
+TextFormField(
+controller: _vehicleYearController,
+keyboardType: TextInputType.number,
+decoration: InputDecoration(
+labelText: 'E-bike Year (e.g., 2023)',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+],
 SizedBox(height: 24),
 ],
 
