@@ -14,6 +14,7 @@ final TextEditingController _emailController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
 
 bool isOnline = false; // By default, the driver starts offline
+  String workerRole = 'Taxi'; // Default path. Can switch to 'Delivery' or 'Store'
 
 Future<void> sendLiveLocation() async {
 final String serverUrl = 'https://afrounited-admin-1.onrender.com/api/driver/update';
@@ -81,57 +82,95 @@ style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
 ),
 SizedBox(height: 20),
 
-// Profile Type Selection Row
-Row(
+
+
+// THE PATH SELECTOR: Taxi | Delivery | Store
+Container(
+padding: EdgeInsets.all(4),
+decoration: BoxDecoration(
+color: Colors.grey.shade200,
+borderRadius: BorderRadius.circular(12),
+),
+child: Row(
 children: [
+// 1. TAXI BUTTON
 Expanded(
+child: GestureDetector(
+onTap: () {
+setState(() { workerRole = 'Taxi'; });
+},
 child: Container(
 padding: EdgeInsets.symmetric(vertical: 12),
 decoration: BoxDecoration(
-color: Colors.grey.shade200,
+color: workerRole == 'Taxi' ? Color(0xFF2E5A27) : Colors.transparent,
 borderRadius: BorderRadius.circular(8),
 ),
 child: Text(
-'Rider',
+'Taxi',
 textAlign: TextAlign.center,
-style: TextStyle(color: Colors.black54),
+style: TextStyle(
+color: workerRole == 'Taxi' ? Colors.white : Colors.black54,
+fontWeight: FontWeight.bold,
 ),
 ),
 ),
-SizedBox(width: 10),
+),
+),
+
+// 2. DELIVERY BUTTON
 Expanded(
+child: GestureDetector(
+onTap: () {
+setState(() { workerRole = 'Delivery'; });
+},
 child: Container(
 padding: EdgeInsets.symmetric(vertical: 12),
 decoration: BoxDecoration(
-color: Color(0xFF2E5A27),
+color: workerRole == 'Delivery' ? Color(0xFF2E5A27) : Colors.transparent,
 borderRadius: BorderRadius.circular(8),
 ),
 child: Text(
-'Driver',
+'Delivery',
 textAlign: TextAlign.center,
-style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+style: TextStyle(
+color: workerRole == 'Delivery' ? Colors.white : Colors.black54,
+fontWeight: FontWeight.bold,
 ),
 ),
 ),
-SizedBox(width: 10),
+),
+),
+
+// 3. STORE BUTTON
 Expanded(
+child: GestureDetector(
+onTap: () {
+setState(() { workerRole = 'Store'; });
+},
 child: Container(
 padding: EdgeInsets.symmetric(vertical: 12),
 decoration: BoxDecoration(
-color: Colors.grey.shade200,
+color: workerRole == 'Store' ? Color(0xFF2E5A27) : Colors.transparent,
 borderRadius: BorderRadius.circular(8),
 ),
 child: Text(
-'Restaurant',
+'Store / Food',
 textAlign: TextAlign.center,
-style: TextStyle(color: Colors.black54),
+style: TextStyle(
+color: workerRole == 'Store' ? Colors.white : Colors.black54,
+fontWeight: FontWeight.bold,
+),
+),
 ),
 ),
 ),
 ],
 ),
+),
 SizedBox(height: 24),
 
+
+  
 // Full Name Input
 TextFormField(
 controller: _nameController,
