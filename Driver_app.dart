@@ -223,6 +223,88 @@ prefixIcon: Icon(Icons.phone, color: Color(0xFF2E5A27)),
 ),
 SizedBox(height: 30),
 
+
+
+
+  // 🌍 UNIVERSAL LOCATION (Everyone sees this)
+TextFormField(
+controller: _countryController,
+decoration: InputDecoration(
+labelText: 'Country (e.g., Guinea)',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+SizedBox(height: 16),
+TextFormField(
+controller: _regionController,
+decoration: InputDecoration(
+labelText: 'Region / Prefecture / Village',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+SizedBox(height: 24),
+
+// 🚗 THE SHAPE-SHIFTER: TAXI & DELIVERY ONLY
+if (workerRole == 'Taxi' || workerRole == 'Delivery') ...[
+Text(
+'Vehicle Information',
+style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+),
+SizedBox(height: 16),
+TextFormField(
+controller: _vehicleMakeController,
+decoration: InputDecoration(
+labelText: 'Vehicle Make (e.g., Toyota, Honda)',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+SizedBox(height: 16),
+TextFormField(
+controller: _plateNumberController,
+decoration: InputDecoration(
+labelText: 'Plate Number / License',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+SizedBox(height: 24),
+],
+
+// 🍔 THE SHAPE-SHIFTER: STORE ONLY
+if (workerRole == 'Store') ...[
+Text(
+'Business Information',
+style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+),
+SizedBox(height: 16),
+TextFormField(
+controller: _storeNameController,
+decoration: InputDecoration(
+labelText: 'Name of Restaurant / Store',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+SizedBox(height: 16),
+TextFormField(
+controller: _storeAddressController,
+decoration: InputDecoration(
+labelText: 'Exact Physical Address',
+border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+fillColor: Colors.white,
+filled: true,
+),
+),
+SizedBox(height: 24),
+],
 // THE UBER-STYLE SMART BUTTON
 SizedBox(
 width: double.infinity,
