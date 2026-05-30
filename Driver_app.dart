@@ -40,33 +40,11 @@ final TextEditingController _storeAddressController = TextEditingController();
 bool isOnline = false; // By default, the driver starts offline
   String workerRole = 'Taxi'; // Default path. Can switch to 'Delivery' or 'Store'
 
-Future<void> sendLiveLocation() async {
-final String serverUrl = 'https://afrounited-admin-1.onrender.com/api/driver/update';
+onPressed: () {
+// Trigger the new Cloud Connection!
+submitApplication();
+},
 
-try {
-print('Transmitting signal to HQ...');
-
-final response = await http.post(
-Uri.parse(serverUrl),
-headers: {'Content-Type': 'application/json'},
-body: jsonEncode({
-'driver_id': 'DRV-001',
-'driver_name': 'Alpha Diallo',
-'location': 'Kagbelen, Guinea',
-'status': 'online'
-}),
-);
-
-if (response.statusCode == 200) {
-print('✅ Success: Dashboard received the signal!');
-print('Server Response: ${response.body}');
-} else {
-print('❌ Error: Dashboard rejected the signal.');
-}
-} catch (e) {
-print('❌ Connection failed: $e');
-}
-}
 
 
 Widget build(BuildContext context) {
