@@ -9,7 +9,7 @@ class CustomerApp extends StatelessWidget {
 Widget build(BuildContext context) {
 return MaterialApp(
 debugShowCheckedModeBanner: false,
-title: 'Afrounited',
+title: 'Afro-United',
 theme: ThemeData(
 primaryColor: Color(0xFF0056B3),
 scaffoldBackgroundColor: Colors.grey[100],
@@ -48,7 +48,7 @@ return Scaffold(
 appBar: AppBar(
 backgroundColor: Color(0xFF0056B3),
 title: Text(
-'Afrounited',
+'Afro-United',
 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
 ),
 elevation: 0,
