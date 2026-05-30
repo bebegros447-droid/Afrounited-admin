@@ -12,6 +12,18 @@ final _formKey = GlobalKey<FormState>();
 final TextEditingController _nameController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
+  // Universal Location Memory
+final TextEditingController _countryController = TextEditingController();
+final TextEditingController _regionController = TextEditingController();
+
+// Vehicle Memory (For Taxi & Delivery)
+final TextEditingController _vehicleMakeController = TextEditingController();
+final TextEditingController _vehicleModelController = TextEditingController();
+final TextEditingController _plateNumberController = TextEditingController();
+
+// Business Memory (For Stores & Restaurants)
+final TextEditingController _storeNameController = TextEditingController();
+final TextEditingController _storeAddressController = TextEditingController();
 
 bool isOnline = false; // By default, the driver starts offline
   String workerRole = 'Taxi'; // Default path. Can switch to 'Delivery' or 'Store'
