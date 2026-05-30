@@ -1,166 +1,74 @@
 import 'package:flutter/material.dart';
 
-class RiderAppRegistration extends StatefulWidget {
-@override
-_RiderAppRegistrationState createState() => _RiderAppRegistrationState();
+void main() {
+runApp(CustomerApp());
 }
 
-class _RiderAppRegistrationState extends State<RiderAppRegistration> {
-final _formKey = GlobalKey<FormState>();
-final TextEditingController _nameController = TextEditingController();
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _phoneController = TextEditingController();
+class CustomerApp extends StatelessWidget {
+@override
+Widget build(BuildContext context) {
+return MaterialApp(
+debugShowCheckedModeBanner: false,
+title: 'Afrounited',
+theme: ThemeData(
+primaryColor: Color(0xFF0056B3), // The Afrounited Blue!
+scaffoldBackgroundColor: Colors.white, // Clean White Background
+fontFamily: 'Roboto',
+),
+home: CustomerHomePage(),
+);
+}
+}
+
+class CustomerHomePage extends StatefulWidget {
+@override
+_CustomerHomePageState createState() => _CustomerHomePageState();
+}
+
+class _CustomerHomePageState extends State<CustomerHomePage> {
+int _selectedIndex = 0;
+
+// The 4 Main Screens the customer can swipe between
+static const List<Widget> _pages = <Widget>[
+Center(child: Text('🌍 Home / Map Screen', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+Center(child: Text('🚕 Book a Taxi', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+Center(child: Text('🍔 Order Food', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+Center(child: Text('👤 My Account', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+];
+
+void _onItemTapped(int index) {
+setState(() {
+_selectedIndex = index;
+});
+}
 
 @override
 Widget build(BuildContext context) {
 return Scaffold(
-backgroundColor: Color(0xFFF4F7F4),
 appBar: AppBar(
-backgroundColor: Color(0xFF2E5A27),
-leading: IconButton(
-icon: Icon(Icons.arrow_back, color: Colors.white),
-onPressed: () {},
-),
+backgroundColor: Color(0xFF0056B3), // Blue Header
 title: Text(
-'Créer un Compte Afrounited',
-style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+'Afrounited',
+style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
 ),
+elevation: 0,
 centerTitle: true,
 ),
-body: SingleChildScrollView(
-padding: EdgeInsets.all(20.0),
-child: Form(
-key: _formKey,
-child: Column(
-crossAxisAlignment: CrossAxisAlignment.start,
-children: [
-Text(
-'Rejoignez notre réseau',
-style: TextStyle(
-fontSize: 24,
-fontWeight: FontWeight.bold,
-color: Color(0xFF2E5A27),
-),
-),
-SizedBox(height: 4),
-Text(
-'Choisissez votre profil et commencez à travailler ou commander.',
-style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-),
-SizedBox(height: 20),
+body: _pages.elementAt(_selectedIndex),
 
-// Profile Type Selection Row
-Row(
-children: [
-Expanded(
-child: Container(
-padding: EdgeInsets.symmetric(vertical: 12),
-decoration: BoxDecoration(
-color: Color(0xFF2E5A27),
-borderRadius: BorderRadius.circular(8),
-),
-child: Text(
-'Rider',
-textAlign: TextAlign.center,
-style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-),
-),
-),
-SizedBox(width: 10),
-Expanded(
-child: Container(
-padding: EdgeInsets.symmetric(vertical: 12),
-decoration: BoxDecoration(
-color: Colors.grey.shade200,
-borderRadius: BorderRadius.circular(8),
-),
-child: Text(
-'Driver',
-textAlign: TextAlign.center,
-style: TextStyle(color: Colors.black54),
-),
-),
-),
-SizedBox(width: 10),
-Expanded(
-child: Container(
-padding: EdgeInsets.symmetric(vertical: 12),
-decoration: BoxDecoration(
-color: Colors.grey.shade200,
-borderRadius: BorderRadius.circular(8),
-),
-child: Text(
-'Restaurant',
-textAlign: TextAlign.center,
-style: TextStyle(color: Colors.black54),
-),
-),
-),
+// The Bottom Navigation Bar
+bottomNavigationBar: BottomNavigationBar(
+items: const <BottomNavigationBarItem>[
+BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+BottomNavigationBarItem(icon: Icon(Icons.local_taxi), label: 'Ride'),
+BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: 'Eat'),
+BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
 ],
-),
-SizedBox(height: 24),
-
-// Full Name Input
-TextFormField(
-controller: _nameController,
-decoration: InputDecoration(
-labelText: 'Nom Complet / Full Name',
-border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-fillColor: Colors.white,
-filled: true,
-),
-),
-SizedBox(height: 16),
-
-// Email Input
-TextFormField(
-controller: _emailController,
-keyboardType: TextInputType.emailAddress,
-decoration: InputDecoration(
-labelText: 'Adresse Email',
-border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-fillColor: Colors.white,
-filled: true,
-),
-),
-SizedBox(height: 16),
-
-// NEW DYNAMIC PHONE INPUT (Removes forced +221 so anyone can type their own code)
-TextFormField(
-controller: _phoneController,
-keyboardType: TextInputType.phone,
-decoration: InputDecoration(
-labelText: 'Numéro de Téléphone',
-hintText: 'Ex: +224... ou +221...',
-border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-fillColor: Colors.white,
-filled: true,
-prefixIcon: Icon(Icons.phone, color: Color(0xFF2E5A27)),
-),
-),
-SizedBox(height: 30),
-
-// Submit Button
-SizedBox(
-width: double.infinity,
-height: 50,
-child: ElevatedButton(
-style: ElevatedButton.styleFrom(
-backgroundColor: Color(0xFF2E5A27),
-shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-),
-onPressed: () {
-print("Registering Rider: ${_phoneController.text}");
-},
-child: Text(
-'Continuer',
-style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-),
-),
-),
-],
-),
-),
+currentIndex: _selectedIndex,
+selectedItemColor: Color(0xFF0056B3), // Turns Blue when tapped
+unselectedItemColor: Colors.grey,
+onTap: _onItemTapped,
+type: BottomNavigationBarType.fixed,
 ),
 );
 }
