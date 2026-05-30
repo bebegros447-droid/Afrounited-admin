@@ -29,6 +29,10 @@ bool hasIdCard = false;
 bool hasVehiclePhotos = false;
 bool hasStorePhotos = false;
 
+  // The Payout Wallet Memory (How they get paid!)
+String selectedWallet = 'Orange Money'; // Default to Orange Money
+final TextEditingController _walletNumberController = TextEditingController();
+
 // Business Memory (For Stores & Restaurants)
 final TextEditingController _storeNameController = TextEditingController();
 final TextEditingController _storeAddressController = TextEditingController();
