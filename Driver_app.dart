@@ -354,6 +354,73 @@ filled: true,
 ),
 SizedBox(height: 24),
 ],
+// 📸 THE PHOTO UPLOAD ENGINE
+Text(
+'Required Documents',
+style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+),
+SizedBox(height: 16),
+
+// UNIVERSAL: Profile Picture (Everyone)
+ListTile(
+shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: Colors.grey.shade300)),
+tileColor: Colors.white,
+leading: Icon(Icons.person, color: hasProfilePic ? Colors.green : Colors.grey),
+title: Text('Profile Picture'),
+subtitle: Text(hasProfilePic ? 'Uploaded Successfully' : 'Tap to upload'),
+trailing: Icon(hasProfilePic ? Icons.check_circle : Icons.camera_alt, color: hasProfilePic ? Colors.green : Color(0xFF2E5A27)),
+onTap: () {
+setState(() { hasProfilePic = true; }); // Magic: Flips false to true!
+},
+),
+SizedBox(height: 12),
+
+// UNIVERSAL: ID Card (Everyone)
+ListTile(
+shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: Colors.grey.shade300)),
+tileColor: Colors.white,
+leading: Icon(Icons.badge, color: hasIdCard ? Colors.green : Colors.grey),
+title: Text('Government ID'),
+subtitle: Text(hasIdCard ? 'Uploaded Successfully' : 'Tap to upload front & back'),
+trailing: Icon(hasIdCard ? Icons.check_circle : Icons.camera_alt, color: hasIdCard ? Colors.green : Color(0xFF2E5A27)),
+onTap: () {
+setState(() { hasIdCard = true; }); // Magic: Flips false to true!
+},
+),
+SizedBox(height: 12),
+
+// 🚗 THE SHAPE-SHIFTER: VEHICLE PHOTOS (Taxi/Delivery Only)
+if (workerRole == 'Taxi' || workerRole == 'Delivery') ...[
+ListTile(
+shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: Colors.grey.shade300)),
+tileColor: Colors.white,
+leading: Icon(Icons.directions_car, color: hasVehiclePhotos ? Colors.green : Colors.grey),
+title: Text('Vehicle Photos'),
+subtitle: Text(hasVehiclePhotos ? 'Uploaded Successfully' : 'Tap to upload 4 angles'),
+trailing: Icon(hasVehiclePhotos ? Icons.check_circle : Icons.camera_alt, color: hasVehiclePhotos ? Colors.green : Color(0xFF2E5A27)),
+onTap: () {
+setState(() { hasVehiclePhotos = true; }); // Magic: Flips false to true!
+},
+),
+SizedBox(height: 12),
+],
+
+// 🍔 THE SHAPE-SHIFTER: STORE PHOTOS (Store Only)
+if (workerRole == 'Store') ...[
+ListTile(
+shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(color: Colors.grey.shade300)),
+tileColor: Colors.white,
+leading: Icon(Icons.storefront, color: hasStorePhotos ? Colors.green : Colors.grey),
+title: Text('Store & Menu Photos'),
+subtitle: Text(hasStorePhotos ? 'Uploaded Successfully' : 'Tap to upload inside/outside/menu'),
+trailing: Icon(hasStorePhotos ? Icons.check_circle : Icons.camera_alt, color: hasStorePhotos ? Colors.green : Color(0xFF2E5A27)),
+onTap: () {
+setState(() { hasStorePhotos = true; }); // Magic: Flips false to true!
+},
+),
+SizedBox(height: 12),
+],
+SizedBox(height: 24),
 // THE UBER-STYLE SMART BUTTON
 SizedBox(
 width: double.infinity,
