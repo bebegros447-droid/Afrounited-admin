@@ -23,6 +23,11 @@ final TextEditingController _plateNumberController = TextEditingController();
   // The Vehicle Dropdown Memory
 String vehicleType = 'Car'; // Defaults to Car
 final TextEditingController _vehicleYearController = TextEditingController();
+  // The Photo Upload Memory (True means they uploaded a picture)
+bool hasProfilePic = false;
+bool hasIdCard = false;
+bool hasVehiclePhotos = false;
+bool hasStorePhotos = false;
 
 // Business Memory (For Stores & Restaurants)
 final TextEditingController _storeNameController = TextEditingController();
